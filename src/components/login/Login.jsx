@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = (props) => { 
@@ -20,28 +21,22 @@ const Login = (props) => {
     const login = (e) => {
         e.preventDefault()
 
-        console.log("PROPS: ", props)
-        console.log("LOL", process.env.clientUrl)
+        console.log("llega a login")
 
-        const data = {clientId: "test", clientSecret: "PeY@@Tr1v1@943"};
-        const url = `http://stg-api.pedidosya.com/public/v1/tokens?clientId=${data.clientId}&clientSecret=${data.clientSecret}`
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const url = 'http://localhost:4000/api/auth/user'
 
-        console.log("llegando a login")
-
-        fetch('https://cors-anywhere.herokuapp.com/' + url, {
-            headers: {
-                'Access-Control-Allow-Origin' : '*',
-                'Access-Control-Allow-Methods' : 'GET'
-            }
-        })
-        .then(function(response) {
-            console.log("response: ", response)
-            return response.json();
-        })
-        .then(function(myJson) {
-            console.log(myJson);
-        });
+        axios.post(url, {
+            email: email,
+            password: password
+          })
+          .then(function (response) {
+            console.log("Auth-user: ", response.data);
+            localStorage.setItem('user-token', response.data)
+            props.history.push('/home') 
+          })
+          .catch(function (error) {
+            console.log("Auth-error: ",error);
+          });
     }
 
     return (
