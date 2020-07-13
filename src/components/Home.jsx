@@ -3,6 +3,8 @@ import axios from 'axios'
 import credentials from '../credentials'
 import GoogleMapReact from 'google-map-react'
 import Marker from './maps/Marker'
+import Restaurants from './Restaurants'
+import RestaurantsPagination from './RestaurantsPagination'
 
 const Home = () => { 
     const [user, setUser] = useState(null)
@@ -10,25 +12,29 @@ const Home = () => {
     const [zoom, setZoom] = useState(12)
     const [lat, setLat] = useState(null)
     const [lng, setLng] = useState(null)
-
+    const [restaurants, setRestaurants] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [restaurantsPerPage, setRestaurantPerPage] = useState(10)
+    const [totalRestaurants, setTotalRestaurants] = useState(null)
 
     useEffect(() => {
-        //getUserInfo()
+        getUserInfo()
+
+        // si vienen parametros por url tengo que llamar a la api
+        user && checkUrlParams()
     }, [])
 
-    const getUserInfo = () => {
+    const getUserInfo = async () => {
         const url = 'http://localhost:4000/api/users/info'
 
-        axios.get(url, {
+        await axios.get(url, {
             headers: {
                 'Authorization' : localStorage.getItem('user-token')
             }
         })
         .then(res => {
-            if (res.status === 200){
-                console.log("res" , res.data)
+            if (res.status === 200)
                 setUser(res.data)
-            }  
         })
         .catch(() => {
             console.log('ERROR')
@@ -36,73 +42,112 @@ const Home = () => {
     }
         
    const _onClick = ({lat, lng, event}) => {
-       console.log(lat, lng, event) 
        setLat(lat)
        setLng(lng)
-
-       searchRestaurantsByCoordinates(lat, lng)
+       searchRestaurantsByCoordinates(lat, lng, 0)
     }  
 
-    // PEGARLE AL BACK ASI ME TRAER LOS RESTAURANTES...
-    const searchRestaurantsByCoordinates = ({lat, lng}) => {
+    const searchRestaurantsByCoordinates = async (latitude, longitude, offset) => {
+        setLoading(true)
+        const url = 'http://localhost:4000/api/restaurant/search'
 
+        if(!user) await getUserInfo()
+
+        const country = user.country.id
+        const point = latitude + "," + longitude
+
+        axios.post(url, {
+            country: country,
+            point: point,
+            max: 10,
+            offset: offset,
+          })
+        .then(res => {
+            if (res.status === 200){
+                setRestaurants(res.data.data)
+                setTotalRestaurants(res.data.total)
+            }
+            setLoading(false)
+        })
+        .catch(() => {
+            console.log('ERROR')
+            setLoading(false)
+        })
     }
+
+    const checkUrlParams = () => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString)
+        const latitudeParam = urlParams.get('lat')
+        const longitudeParam = urlParams.get('lng')
+
+        if(latitudeParam && longitudeParam)
+            searchRestaurantsByCoordinates(latitudeParam, longitudeParam)
+    }
+
+    const paginate = pageNumber => {
+        let offset = restaurantsPerPage * pageNumber
+        searchRestaurantsByCoordinates(lat, lng, offset)
+        return pageNumber
+    }
+
 
     return (
         <div>
             {
                 user &&
-                <div className="container d-flex justify-content-center" style={{backgroundColor: '#F52F41', color: 'white'}}>
-                    <span> Bienvenido: </span>
-                    <span> { user.name } Matias</span>
-                    <span> { user.lastName } Chao</span>
+                <div className="container d-flex justify-content-center pt-3 pb-3" style={{backgroundColor: '#F52F41', color: 'white'}}>
+                    <span className="font-weight-bold"> Bienvenido: </span>
+                    <span className="ml-2 mr-1"> { user.name } </span>
+                    <span> { user.lastName } </span>
                 </div>
-            }
-              <div className="container p-4" style={{backgroundColor: '#F52F41', color: 'white'}}>
-                  
-                  <div className="row pb-5">
-                      <div className="col-12 d-flex justify-content-center">
-                        <span className="font-weight-bold"> Bienvenido: </span>
-                        <span className="pl-2 pr-1"> Matias</span>
-                        <span> Chao</span>
-                      </div>
-                  </div>
-
-                </div>
+            }         
+            <div className="row w-100">
                 
-                
-                <div className="row w-100">
-                    
-                    <div className="col-6 text-center mt-4" style={{width: '100%', height: '550px'}}>
-                        <GoogleMapReact
-                            bootstrapURLKeys = {{ key: credentials.mapsKey }}
-                            defaultZoom = { zoom }
-                            defaultCenter = { center }
-                            yesIWantToUseGoogleMapApiInternals
-                            onClick = { _onClick }
-                        >
-                            {
-                                lat && 
-                                <Marker
-                                    lat = { lat }
-                                    lng = { lng }
-                                    name="My Marker"
-                                    color = "#F52F41"
-                                />
-                            }
-                        </GoogleMapReact>
-                    </div>
-
-                    <div className="col-3">
-                        restanrantes
-                        {lat && lat} 
-                        {lng && lng}
-                    </div>
+                <div className="col-6 text-center mt-4" style={{width: '100%', height: '550px'}}>
+                    <GoogleMapReact
+                        bootstrapURLKeys = {{ key: credentials.mapsKey }}
+                        defaultZoom = { zoom }
+                        defaultCenter = { center }
+                        yesIWantToUseGoogleMapApiInternals
+                        onClick = { _onClick }
+                    >
+                        {
+                            lat && 
+                            <Marker
+                                lat = { lat }
+                                lng = { lng }
+                                name="My Marker"
+                                color = "#F52F41"
+                            />
+                        }
+                    </GoogleMapReact>
                 </div>
             
+                <div className="col-4 text-center">
+                    {
+                        totalRestaurants > 0 ?
+                        <h3 className="h3 mt-3"> Restaurantes </h3> : 
+                        <h4 className="h4 mt-3"> Click en el mapa para ver los restaurantes disponibles </h4>
+                    }
+
+                    <Restaurants 
+                        restaurants = { restaurants }
+                        loading = { loading }
+                    />
+
+                    {
+                        totalRestaurants > 0 && 
+                        <RestaurantsPagination 
+                            restaurantsPerPage = { restaurantsPerPage }
+                            totalRestaurants = { totalRestaurants }
+                            paginate = { paginate }
+                        />
+                    }
+                </div>
+            </div>
         </div>
     )
 }
-
 
 export default Home
