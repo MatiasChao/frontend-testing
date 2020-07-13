@@ -1,69 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Correr los Proyectos
 
-## Available Scripts
+### `Frontend (pedidos) - ReactJS`
 
-In the project directory, you can run:
+.) Para poder correr el Front en React debemos:
+ 1) clonar este repo ( url )
+ 2) instalar las dependencias ( npm install )
+ 3) npm start 
+ 4) va a ejecutarse en el puerto 3000
+    http://localhost:3000/login
 
-### `npm start`
+  **Notas**
+  En el archivo "credentials.js" necesitamos configurar las siguientes variables:
+     .) En este archvio le tenemos que pasar el mapKey de GoogleMaps, les dejo mi key así lo pueden probar para que no tengan que generarse una nueva.
+        mapsKey: 'AIzaSyA9jI7cmDJiM2q7R_Q2aoG7olcptC345UA'
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `Backend (backend) - NodeJS + Express + MongoDB`
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+.) Para poder correr el Backend en NodeJS debemos:
+  1) clonar el repo ( url )
+  2) instalar las dependencias ( npm install )
+  3) node .
+  4) va a estar corriendo en el puerto 4000 por defecto
 
-### `npm test`
+**Notas**
+  En el archivo "variables.env" necesitamos configurar las siguientes variables:
+    .) Donde tenemos alojada al base de datos (creé un cluster con una base de datos en Mongo) lo dejó configurado para que puedan acceder sin problema desde      cualquier ip.
+    .) Agregar los parametros de "clientId" y "clientSecret" que nos dan
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### `Uso del Stack`
+**Frontend**
+Elegí `React` dado que es muy rápido para el procesamiento de datos y tiene la gran ventaja de usar el VirtualDOM, así no tenemos que renderizar toda la página al cambiar algunos componentes.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Backend**
+Use `Node + Express` porque es especialmente bueno para aplicaciones realtime que necesitan mantener una conexión persistente entre el browser y el servidor.
+También nos permite expandir nuestro código añadiendo módulos de forma fácil gracias al Node Package Manager (NPM)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+**Database**
+La base está en `MongoDB` dado que al ser una base de datos no relacional me reflexibiliza la escalabilidad del proyecto.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `Pendientes / Mejoras`
+1) Para las busquedas con las mismas coordenadas en menos de un minuto lo qué haría sería guardarla en una tabla con TTL de 1 min, al hacer una búsqueda chequeó primero en la tabla y si no lo encuentro hago una nueva busqueda.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2) Mejoras en validaciones. Agregaría Test Unitarios
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3) Terminar el Paginado (no quedó al 100%)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4) Guardar makers de cada buscado restaurante en el Mapa. Guardaría las busquedas en memoría y los mostraróa en el GoolgeMaps
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# pedidos
