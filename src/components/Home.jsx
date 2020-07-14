@@ -6,22 +6,23 @@ import Marker from './maps/Marker'
 import Restaurants from './Restaurants'
 import RestaurantsPagination from './RestaurantsPagination'
 
-const Home = () => { 
+const Home = (props) => { 
     const [user, setUser] = useState(null)
-    const [center, setCenter] = useState({lat: -34.9032800, lng: -56.1881600 });
-    const [zoom, setZoom] = useState(12)
+    const [center] = useState({lat: -34.9032800, lng: -56.1881600 });
+    const [zoom] = useState(12)
     const [lat, setLat] = useState(null)
     const [lng, setLng] = useState(null)
     const [restaurants, setRestaurants] = useState([])
     const [loading, setLoading] = useState(false)
-    const [restaurantsPerPage, setRestaurantPerPage] = useState(10)
+    const [restaurantsPerPage] = useState(10)
     const [totalRestaurants, setTotalRestaurants] = useState(null)
 
     useEffect(() => {
-        getUserInfo()
-
-        // si vienen parametros por url tengo que llamar a la api
-        user && checkUrlParams()
+        if(localStorage.getItem('user-token')){
+            getUserInfo()
+            checkUrlParams()
+        } else
+            props.history.push('/login')   
     }, [])
 
     const getUserInfo = async () => {
@@ -33,8 +34,10 @@ const Home = () => {
             }
         })
         .then(res => {
-            if (res.status === 200)
+            if (res.status === 200){
                 setUser(res.data)
+                localStorage.setItem('user-country', res.data.country.id)
+            }
         })
         .catch(() => {
             console.log('ERROR')
@@ -53,7 +56,7 @@ const Home = () => {
 
         if(!user) await getUserInfo()
 
-        const country = user.country.id
+        const country = localStorage.getItem('user-country')
         const point = latitude + "," + longitude
 
         axios.post(url, {
@@ -70,7 +73,6 @@ const Home = () => {
             setLoading(false)
         })
         .catch(() => {
-            console.log('ERROR')
             setLoading(false)
         })
     }
@@ -82,7 +84,7 @@ const Home = () => {
         const longitudeParam = urlParams.get('lng')
 
         if(latitudeParam && longitudeParam)
-            searchRestaurantsByCoordinates(latitudeParam, longitudeParam)
+            searchRestaurantsByCoordinates(latitudeParam, longitudeParam, 0)
     }
 
     const paginate = pageNumber => {

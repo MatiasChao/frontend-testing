@@ -16,7 +16,7 @@ const Restaurants = ({restaurants, loading}) => {
                                     </a> 
                                     <span className="font-weight-light"> ☆ { r.ratingScore } </span> 
                                 </p>
-                                <img src={`https://d1v73nxuzaqxgd.cloudfront.net/restaurants/${r.logo}`} width="50" height="50"></img>
+                                <img src={`https://d1v73nxuzaqxgd.cloudfront.net/restaurants/${r.logo}`} alt="logo" width="50" height="50"></img>
                                 <span className="font-weight-light ml-2" style={{fontSize: '12px'}}>Tiempo de entrega {r.deliveryTimeMaxMinutes}</span>
                             </li>
                         ))

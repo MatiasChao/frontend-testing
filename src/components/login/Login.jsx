@@ -43,13 +43,11 @@ const Login = (props) => {
             password: password
           })
           .then(function (response) {
-            console.log("Auth-user: ", response.data);
-            localStorage.setItem('user-token', response.data)
+            localStorage.setItem('user-token', response.data.access_token)
             props.history.push('/home') 
             setLoading(false)
           })
           .catch(function (error) {
-            console.log("Auth-error: ",error);
             dispatch({ type: ERROR_LOGIN, message: 'Error en el email y/o password'})
             setLoading(false)
           });
@@ -60,13 +58,23 @@ const Login = (props) => {
                 <LoadingOverlay
                     active={loading}
                     spinner
-                    text='Validando usuario...'
+                    styles={{
+                        spinner: (base) => ({
+                          ...base,
+                          width: '120px',
+                          marginTop: '100px',
+                          fontWeight: 'bold',
+                          '& svg circle': {
+                            stroke: 'yellow'
+                          }
+                        })
+                      }}
                     >
               </LoadingOverlay>
             
             <div className="container d-flex justify-content-center" style={{backgroundColor: '#F52F41'}}>
-                <div className="form-container mt-5 mb-5 p-3 text-center" style={{backgroundColor: '#fff'}}>
-                    <h5 className="m-2 mb-3"> SIGN IN TO YOUR ACCOUNT </h5>
+                <div className="form-container mt-5 mb-5 p-3 text-center" style={{backgroundColor: '#fff', width: '400px'}}>
+                    <h5 className="m-2 mb-3"> INICIAR SESIÓN </h5>
 
                     <form onSubmit={login}>
                         <div className="mb-2">
@@ -82,7 +90,7 @@ const Login = (props) => {
                         </div>
 
                         <div>
-                            <input type="submit" className="mt-4 p-2" value="SIGN IN" style={{ backgroundColor: '#F52F41', border: 'none', color: '#fff', width: '90%' }}/>
+                            <input type="submit" className="mt-4 p-2 mb-2" value="Entrar" style={{ backgroundColor: '#F52F41', border: 'none', color: '#fff', width: '90%' }}/>
                         </div>
 
                         {

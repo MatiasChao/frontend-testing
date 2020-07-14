@@ -4,7 +4,7 @@ const RestaurantsPagination = ({ restaurantsPerPage, totalRestaurants, paginate 
 
     const pageNumbers = []
     const [currentPage, setCurrentPage] = useState(0)
-    const maxPage = Math.ceil(totalRestaurants / restaurantsPerPage);
+    //const maxPage = Math.ceil(totalRestaurants / restaurantsPerPage);
 
     for(let i = 0; i <= Math.ceil(totalRestaurants / restaurantsPerPage); i++){
         pageNumbers.push(i)
@@ -15,6 +15,7 @@ const RestaurantsPagination = ({ restaurantsPerPage, totalRestaurants, paginate 
         setCurrentPage(number)
     }
 
+    /*
     const next = () => {
         setCurrentPage(currentPage => Math.min(currentPage + 1, maxPage))
     }
@@ -27,6 +28,7 @@ const RestaurantsPagination = ({ restaurantsPerPage, totalRestaurants, paginate 
         const pageNumber = Math.max(1, currentPage)
         setCurrentPage(currentPage => Math.min(pageNumber, maxPage))
     }
+    */
 
     return (
         <nav>
