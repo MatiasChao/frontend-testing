@@ -3,7 +3,7 @@
 ### `Frontend (pedidos) - ReactJS`
 
 .) Para poder correr el Front en React debemos:
- 1) clonar este repo ( url )
+ 1) clonar este repo ( https://github.com/MatiasChao/pedidos.git )
  2) instalar las dependencias ( npm install )
  3) npm start 
  4) va a ejecutarse en el puerto 3000
@@ -11,21 +11,24 @@
 
   **Notas**
   En el archivo "credentials.js" necesitamos configurar las siguientes variables:
-     .) En este archvio le tenemos que pasar el mapKey de GoogleMaps, les dejo mi key así lo pueden probar para que no tengan que generarse una nueva.
+    
+    .) En este archvio le tenemos que pasar el mapKey de GoogleMaps, les dejo mi key así lo pueden probar para que no tengan que generarse una nueva.
         mapsKey: 'AIzaSyA9jI7cmDJiM2q7R_Q2aoG7olcptC345UA'
 
 ### `Backend (backend) - NodeJS + Express + MongoDB`
 
 .) Para poder correr el Backend en NodeJS debemos:
-  1) clonar el repo ( url )
+  1) clonar el repo ( https://github.com/MatiasChao/backend.git )
   2) instalar las dependencias ( npm install )
   3) node .
   4) va a estar corriendo en el puerto 4000 por defecto
 
 **Notas**
   En el archivo "variables.env" necesitamos configurar las siguientes variables:
+   
     .) Donde tenemos alojada al base de datos (creé un cluster con una base de datos en Mongo) lo dejó configurado para que puedan acceder sin problema desde      cualquier ip.
-    .) Agregar los parametros de "clientId" y "clientSecret" que nos dan
+    
+    .) Agregar los parametros de "clientId" y "clientSecret" que me dan
 
 
 ### `Uso del Stack`
@@ -47,5 +50,5 @@ La base está en `MongoDB` dado que al ser una base de datos no relacional me re
 
 3) Terminar el Paginado (no quedó al 100%)
 
-4) Guardar makers de cada buscado restaurante en el Mapa. Guardaría las busquedas en memoría y los mostraróa en el GoolgeMaps
+4) Guardar makers de cada buscado restaurante en el Mapa. Guardaría las busquedas en memoría y los mostraría en el GoolgeMaps
 
