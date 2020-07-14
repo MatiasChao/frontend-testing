@@ -59,7 +59,7 @@ const Home = () => {
         axios.post(url, {
             country: country,
             point: point,
-            max: 10,
+            max: 20,
             offset: offset,
           })
         .then(res => {
@@ -90,7 +90,6 @@ const Home = () => {
         searchRestaurantsByCoordinates(lat, lng, offset)
         return pageNumber
     }
-
 
     return (
         <div>

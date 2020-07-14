@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import React, { useState, useReducer, Fragment } from 'react'
 import axios from 'axios'
+import LoadingOverlay from 'react-loading-overlay'
+import LoginReducer from './LoginReducer'
+import { ERROR_LOGIN } from "../../constans"
 
 const Login = (props) => { 
 
@@ -8,6 +10,7 @@ const Login = (props) => {
         email: '',
         password: ''
     })
+    const [loading, setLoading] = useState(false)
 
     const { email, password } = user
 
@@ -18,10 +21,20 @@ const Login = (props) => {
         })
     }
 
-    const login = (e) => {
+    const [state, dispatch] = useReducer(LoginReducer, {
+        error: false,
+        message: ''
+    })
+
+    const login = e => {
         e.preventDefault()
 
-        console.log("llega a login")
+        if(email.trim() === '' || password.trim() === '') {
+            dispatch({ type: ERROR_LOGIN, message: 'El email y/o password no pueden ser vacios' })
+            return
+        }
+
+        setLoading(true)
 
         const url = 'http://localhost:4000/api/auth/user'
 
@@ -33,14 +46,25 @@ const Login = (props) => {
             console.log("Auth-user: ", response.data);
             localStorage.setItem('user-token', response.data)
             props.history.push('/home') 
+            setLoading(false)
           })
           .catch(function (error) {
             console.log("Auth-error: ",error);
+            dispatch({ type: ERROR_LOGIN, message: 'Error en el email y/o password'})
+            setLoading(false)
           });
     }
 
     return (
-        <div className="container d-flex justify-content-center" style={{backgroundColor: '#F52F41'}}>
+        <Fragment>
+                <LoadingOverlay
+                    active={loading}
+                    spinner
+                    text='Validando usuario...'
+                    >
+              </LoadingOverlay>
+            
+            <div className="container d-flex justify-content-center" style={{backgroundColor: '#F52F41'}}>
                 <div className="form-container mt-5 mb-5 p-3 text-center" style={{backgroundColor: '#fff'}}>
                     <h5 className="m-2 mb-3"> SIGN IN TO YOUR ACCOUNT </h5>
 
@@ -60,9 +84,14 @@ const Login = (props) => {
                         <div>
                             <input type="submit" className="mt-4 p-2" value="SIGN IN" style={{ backgroundColor: '#F52F41', border: 'none', color: '#fff', width: '90%' }}/>
                         </div>
+
+                        {
+                            state.error && <span className="text-danger"> { state.message } </span>
+                        }
                     </form>
                 </div>
             </div>
+        </Fragment>
     )
 }
 

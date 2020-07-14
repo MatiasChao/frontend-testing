@@ -1,0 +1,1 @@
+export const ERROR_LOGIN = 'ERROR_LOGIN';
