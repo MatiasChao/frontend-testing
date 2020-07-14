@@ -42,6 +42,14 @@ También nos permite expandir nuestro código añadiendo módulos de forma fáci
 **Database**
 La base está en `MongoDB` dado que al ser una base de datos no relacional me reflexibiliza la escalabilidad del proyecto.
 
+### `Admin`
+**Cantidad de usuarios logueados**
+
+GET / http://localhost:4000/api/admin/users
+
+Cuando un usuario inicia sesión lo guardo en ddl de la Base de Datos. Ese ddl puede ser una cantidad de tiempo x que le pasemos.
+Al llegar al tiempo dado se va a eliminar solo el registro, sino cuando cierra sesión se elimina el usuario de la base.
+
 
 ### `Pendientes / Mejoras`
 1) Para las busquedas con las mismas coordenadas en menos de un minuto lo qué haría sería guardarla en una tabla con TTL de 1 min, al hacer una búsqueda chequeó primero en la tabla y si no lo encuentro hago una nueva busqueda.
