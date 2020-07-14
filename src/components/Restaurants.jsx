@@ -1,5 +1,15 @@
 import React, { Fragment } from 'react'
 const Restaurants = ({restaurants, loading}) => { 
+
+    // ordenar los restaurantes de forma descendente y abiertos (opened = 1)
+    restaurants.sort(function (a, b){
+        return (b.ratingScore - a.ratingScore)
+    })
+
+    restaurants.sort(function (a, b){
+        return (b.opened - a.opened)
+    })
+
     return(
         <Fragment>
             { loading && <h2> Loading... </h2> }
