@@ -36,11 +36,23 @@ const Home = (props) => {
         .then(res => {
             if (res.status === 200){
                 setUser(res.data)
+
+                // guardar el usuario para saber la cantidad de usuarios logueados
+                saveUserLogged(res.data.id)
+
                 localStorage.setItem('user-country', res.data.country.id)
             }
         })
         .catch(() => {
             console.log('ERROR')
+        })
+    }
+
+    const saveUserLogged = (id) => {   
+        const url = 'http://localhost:4000/api/users/logged'
+
+        axios.post(url, {
+            userId: id
         })
     }
         
